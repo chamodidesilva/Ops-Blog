@@ -27,4 +27,4 @@ jobs:
 
             - name: Run tests
               run: |
-                  pytest -q
+                  pytest -q || if [ $? -eq 5 ]; then echo "No tests found, continuing"; else exit $?; fi
