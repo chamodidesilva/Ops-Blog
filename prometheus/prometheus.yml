@@ -6,6 +6,15 @@ scrape_configs:
     scrape_interval: 5s   
     metrics_path: '/metrics'  # Flask app metrics endpoint
     static_configs:
-      - targets: ['web:5000']  # Flask app service name and exposed port
+      - targets: 
+        - web:5000
+      # ['web:5000']  # Flask app service name and exposed port
     scheme: http
+    # bearer_token_file: /etc/prometheus/secrets/prom_key  # Path to the bearer token file
   
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+        labels:
+          app: "prometheus"
+

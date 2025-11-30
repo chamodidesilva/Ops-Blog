@@ -1,8 +1,20 @@
 services:
+  # init:
+  #   image: alpine:latest
+  #   entrypoint: ["/bin/sh", "/scripts/init_secrets.sh"]
+  #   volumes:
+  #     - ./scripts:/scripts
+  #     - ./secrets:/secrets
+  #   command: []
+
   web:
     build: .
     ports:
       - 5000:5000
+    # volumes:
+    #   - ./secrets:/secrets
+    # depends_on:
+    #   - init
     develop:
       watch:
         - action: sync
@@ -14,8 +26,11 @@ services:
     container_name: prometheus
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml  # Bind mount the config file
+      # - ./secrets:/etc/prometheus/secrets  # Bind mount the secrets directory
     ports:
       - "9090:9090" 
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'  # Specify the config file location
-    restart: unless-stopped
+    # restart: unless-stopped
+    # depends_on:
+    #   - init
