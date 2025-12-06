@@ -48,7 +48,7 @@ jobs:
               run: kubectl get nodes
             - name: Deploy to Minikube
               run: |
-                kubectl -f apply k8s/
-                kubectl rollout status deployment/flask-app-deployment
+                kubectl apply -f k8s/deployment.yaml
+                kubectl rollout status deployment/flask-deployment
 
 
