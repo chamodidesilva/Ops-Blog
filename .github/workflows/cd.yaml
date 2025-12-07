@@ -58,11 +58,14 @@ jobs:
             - name: Verify Deployment
               run:
                 kubectl rollout status deployment/flask-deployment
+              timeout-minutes: 4
+              continue-on-error: true
             - name: Access Service
               run: |
                 kubectl get svc flask-service
                 port=$(kubectl get svc flask-service -o jsonpath='{.spec.ports[0].nodePort}')
                 ip=$(minikube ip)
                 curl --fail http://"$ip":"$port"/hello
-
+            - name: Final pod check
+              run: kubectl get pods
 

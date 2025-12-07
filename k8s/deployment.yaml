@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
       - name: flask
-        image: ${{ env.IMAGE }}
+        image: "$IMAGE"
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
 
