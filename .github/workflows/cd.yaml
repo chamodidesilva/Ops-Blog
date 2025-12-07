@@ -5,8 +5,7 @@ on:
         branches:
             - staging
     push:
-        branches: 
-            - staging
+        branches: [ staging, debug/* ]
 env:
   IMAGE: ${{ vars.IMAGE }}:${{ github.sha }}
 jobs:
@@ -50,7 +49,20 @@ jobs:
               run: kubectl get nodes
             - name: Deploy to Minikube
               run: |
-                kubectl apply -f k8s/deployment.yaml
+                envsubst < k8s/deployment.yaml | kubectl apply -f -
+            - name: Debug
+              run: |
+                kubectl get deployments
+                kubectl get services
+                kubectl get pods
+            - name: Verify Deployment
+              run:
                 kubectl rollout status deployment/flask-deployment
+            - name: Access Service
+              run: |
+                kubectl get svc flask-service
+                port=$(kubectl get svc flask-service -o jsonpath='{.spec.ports[0].nodePort}')
+                ip=$(minikube ip)
+                curl --fail http://"$ip":"$port"/hello
 
 
