@@ -7,10 +7,9 @@ on:
           required: false
           default: "false"
     pull_request:
-        branches:
-            - staging
+        branches: [ staging, main ]
     push:
-        branches: [ staging, debug/* ]
+        branches: [ staging, main ]
 env:
   IMAGE: ${{ vars.IMAGE }}:${{ github.sha }}
 jobs:
