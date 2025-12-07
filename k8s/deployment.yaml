@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
       - name: flask
-        image: chamodide/flask-app:test
+        image: "$IMAGE"
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
 
@@ -33,4 +34,3 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 5000
-      nodePort: 30007

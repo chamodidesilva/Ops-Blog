@@ -1,12 +1,15 @@
 name: CD
 on:
     workflow_dispatch:
+      inputs:
+        debug:
+          description: "Enable debug mode"
+          required: false
+          default: "false"
     pull_request:
-        branches:
-            - staging
+        branches: [ staging, main ]
     push:
-        branches: 
-            - staging
+        branches: [ staging, main ]
 env:
   IMAGE: ${{ vars.IMAGE }}:${{ github.sha }}
 jobs:
@@ -50,7 +53,22 @@ jobs:
               run: kubectl get nodes
             - name: Deploy to Minikube
               run: |
-                kubectl apply -f k8s/deployment.yaml
+                envsubst < k8s/deployment.yaml | kubectl apply -f -
+            - name: Debug cluster state
+              if: ${{ inputs.debug == 'true' }}
+              run: |
+                sleep 10
+                kubectl describe deployments/flask-deployment
+                kubectl describe services/flask-service
+                kubectl get rs
                 kubectl rollout status deployment/flask-deployment
-
+              timeout-minutes: 5
+              continue-on-error: true
+            - name: Access Service
+              run: |
+                sleep 20
+                kubectl get svc flask-service
+                port=$(kubectl get svc flask-service -o jsonpath='{.spec.ports[0].nodePort}')
+                ip=$(minikube ip)
+                curl --fail http://"$ip":"$port"/hello
 
