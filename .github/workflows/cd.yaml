@@ -67,6 +67,7 @@ jobs:
               continue-on-error: true
             - name: Access Service
               run: |
+                sleep 20
                 kubectl get svc flask-service
                 port=$(kubectl get svc flask-service -o jsonpath='{.spec.ports[0].nodePort}')
                 ip=$(minikube ip)
