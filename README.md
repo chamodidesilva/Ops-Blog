@@ -1,6 +1,7 @@
 <div align="center">
 <h3 align="center">Flask Blog App</h3>
   <p>A DevOps Anchor Project</p>
+  [![Docker][docker-shield]][docker-url]
 </div>
 
 <!-- TABLE OF CONTENTS -->
@@ -33,7 +34,7 @@
 ## About The Project
 
 This project uses a minimal Flask application as the practice workload for designing, implementing and demonstrating modern DevOps workflows. The focus of this repository is on DevOps tooling, automation, and infrastructure. 
-The project will evolve through multiple stages, as displayed in the Roadmap. 
+The project will evolve through multiple stages, as displayed in the <a href="#roadmap">Roadmap</a>. 
 The application workload is based on the <a href="https://flask.palletsprojects.com/en/stable/tutorial/">official Flask blog tutorial</a> structure and intentionally paused at initial application factory creation to layer the DevOps practices on top of the workload.
 
 ### Current Features
@@ -42,8 +43,8 @@ The application workload is based on the <a href="https://flask.palletsprojects.
 - Custom Prometheus metric tracking the endpoint in a containerized setup
 - Docker compose orchestrating application and monitoring containers
 #### CI/CD
-- CI workflow with Flake8 linting Pytest unit testing for the endpoint
-- CD workflow deploying the Flask application to a local Kubernetes cluster as the staging environment
+- CI workflow with Flake8 linting and Pytest unit testing for the endpoint
+- CD workflow deploying the Flask application to a Kubernetes cluster on a Gihub-hosted runner, which acts as the current staging environment
 #### Kubernetes
 - Kubernetes manifest for the Flask app deployment
 - Deployment to a single node Minikube cluster
@@ -111,9 +112,16 @@ You can view the appication structure from official Flask blog tutorial's <a hre
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first
+If you have any suggestions to make this project better, please fork the repo and open a pull request. For major changes, please open an issue first
 to discuss what you would like to change.
 
 ## Contact
+Email: chamodidesil@gmail.com
 
 ## Acknowledgments
+Resources that helped me throughout this project and may support you on yours.
+- https://flask.palletsprojects.com/en/stable/tutorial/
+- https://medium.com/@fenari.kostem/monitoring-your-web-app-with-prometheus-and-grafana-a-step-by-step-guide-8286dae606c7
+- https://dev.to/camptocamp-ops/testing-application-monitoring-locally-with-a-docker-composition-47hn
+- https://www.freecodecamp.org/news/learn-continuous-integration-delivery-and-deployment/
+- https://kubernetes.io/docs/tasks/
