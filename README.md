@@ -10,12 +10,8 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
-        <li><a href="#built-with">Current Capabilites</a></li>
+        <li><a href="#current-features">Current Features</a></li>
       </ul>
-      <ul>
-        <li><a href="#built-with">Roadmap</a></li>
-      </ul><!-- ABOUT THE PROJECT -->
-## About The Project
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -26,9 +22,8 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#license">App Structure</a></li>
+    <li><a href="#app-structure">App Structure</a></li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
@@ -37,20 +32,31 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project uses a minimal Flask application as the workload for practicing and demonstrating modern DevOps workflows. The focus of this repository is on DevOps tooling, automation, and infrastructure. 
-The project will evolve through multiple stages, including containerization, CI/CD, testing, deployment to Kubernetes and integration with AWS.
+This project uses a minimal Flask application as the practice workload for designing, implementing and demonstrating modern DevOps workflows. The focus of this repository is on DevOps tooling, automation, and infrastructure. 
+The project will evolve through multiple stages, as displayed in the Roadmap. 
+The application workload is based on the <a href="https://flask.palletsprojects.com/en/stable/tutorial/">official Flask blog tutorial</a> structure and intentionally paused at initial application factory creation to layer the DevOps practices on top of the workload.
 
-### Current Capabilites
-- Basic Flask app displaying a hello-world page
-- App containerized with Docker
-- Prometheus set up to monitor the Flask app
-- Prometheus and app containers orchestrated with Docker compose
-- CI workflow setup with no tests added yet
+### Current Features
+#### Application
+- Minimal Flask app endpoint returning a message
+- Custom Prometheus metric tracking the endpoint in a containerized setup
+- Docker compose orchestrating application and monitoring containers
+#### CI/CD
+- CI workflow with Flake8 linting Pytest unit testing for the endpoint
+- CD workflow deploying the Flask application to a local Kubernetes cluster as the staging environment
+#### Kubernetes
+- Kubernetes manifest for the Flask app deployment
+- Deployment to a single node Minikube cluster
+- Service created to expose the app
+#### Git Workflow
+- Branching strategy: main/staging/feature* 
+- Branch naming follows <a href="https://conventional-branch.github.io/">Conventional Branch</a>
+- Commit naming follows <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a>
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Follow this section to set up the app with current capabilites on your local dev environment
+Follow this section to set up the app with current features on your local dev environment
 
 ### Prerequisites
 
@@ -82,18 +88,32 @@ To view prometheus UI, open it in the browser with: http://127.0.0.1:9090
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] CD pipeline setup
-  - [ ] Automated tests
-- [ ] Deploy to Kubernetes
-- [ ] Add prometheus metrics
-- [ ] Add grafana dashboards
-- [ ] Use IaC for provisioning
-- [ ] Integrate with AWS
+### Foundations (*Completed*)
+- [x] Current features
+### Kubernetes
+- [ ] Transition to a multi-service Kubernetes cluster (app, database, monitoring)
+### Observability
+- [ ] Add Prometheus to the Kubernetes cluster
+- [ ] Prometheus integrated in a containerized setup
+- [ ] Deploy Grafana for metrics visualization
+#### Cloud & GitOps
+- [ ] Migrate cluster from Minikube to AWS EKS
+- [ ] Use Cloudformation to spin up resources
+#### Application Expansion
+- [ ] Complete the Flask blog app
+- [ ] Add  SQLite database
+- [ ] Implement authentication and blog features
+- [ ] Expand testing (integration, smoke tests)
+- [ ] Scale CI/CD workflows with application growth
 
 ## App Structure
-You can view the app workload structure from [this](https://flask.palletsprojects.com/en/stable/tutorial/) Flask tutorial on which this project is based on
+You can view the appication structure from official Flask blog tutorial's <a href="https://flask.palletsprojects.com/en/stable/tutorial/layout/">project layout</a>.
 
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
+
+## Contact
+
+## Acknowledgments
