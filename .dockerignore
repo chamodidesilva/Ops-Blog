@@ -1,25 +1,11 @@
-# personal notes
-notes/
+* 
 
-README.md
-.git
-.gitignore
+# whitelist flask app files
+!flaskr
+!flaskr/** 
 
-.venv/
+# whitelist build files
+!Dockerfile
+!requirements.txt
+!compose.yaml
 
-*.pyc
-__pycache__/
-
-instance/
-
-.pytest_cache/
-.coverage
-htmlcov/
-
-dist/
-build/
-*.egg-info/
-
-prometheus/
-secrets/
-k8s/
