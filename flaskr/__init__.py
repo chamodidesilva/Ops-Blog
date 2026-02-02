@@ -38,5 +38,8 @@ def create_app(test_config=None):
     @app.route('/metrics')
     def metrics():
         return generate_latest(), 200, {'Content-Type': 'text/plain'}
+    
+    from . import db
+    db.init_app(app)
 
     return app
