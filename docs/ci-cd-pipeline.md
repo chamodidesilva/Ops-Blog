@@ -40,7 +40,7 @@ This ensures that both feature development and integration branches are continuo
 The CI pipeline consists of three independent jobs executed on separate runners:
 
 1. Linting Job
-2. Unit Testing Job
+2. Testing Job
 3. Docker Build Job
 
 
@@ -95,19 +95,21 @@ These rules can be tightened as the project matures.
 
 ---
 
-### 2. Unit Testing Job
+### 2. Testing Job
 
 **Purpose:**  
-Validates application logic using automated unit tests included in the tests/ directory
+Validates application logic using automated functional tests included in the tests/ directory and checks test coverage. 
 
 **Steps:**
 - Checkout source code
 - Set up Python environment
 - Install dependencies
-- Run Pytest test suite
+- Run tests with pytest-cov test suite
+- Checks coverage with pytest-cov
+- Output an error if coverage is below 70%
 
 **Tools Used:**
-- Pytest
+- pytest-cov
 
 ---
 
