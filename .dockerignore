@@ -8,4 +8,4 @@
 !Dockerfile
 !requirements.txt
 !compose.yaml
-
+!entrypoint.sh

@@ -8,7 +8,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+RUN chmod +x entrypoint.sh
+
 EXPOSE 5000
 
-CMD [ "flask", "--app", "flaskr", "run", "--debug", "--host=0.0.0.0"]
-
+ENTRYPOINT ["/usr/local/app/entrypoint.sh"]

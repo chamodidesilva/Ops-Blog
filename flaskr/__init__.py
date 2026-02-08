@@ -38,5 +38,15 @@ def create_app(test_config=None):
     @app.route('/metrics')
     def metrics():
         return generate_latest(), 200, {'Content-Type': 'text/plain'}
+    
+    from . import db
+    db.init_app(app)
 
+    from . import auth
+    app.register_blueprint(auth.bp)
+
+    from . import blog
+    app.register_blueprint(blog.bp)
+    app.add_url_rule('/', endpoint='index')
+    
     return app
