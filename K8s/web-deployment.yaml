@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaskr-deployment
+spec:
+  # flaskr-service matches and exposes pods with label 'web'
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: flaskr
+          image: deploy-ops-blog:latest
+          imagePullPolicy: IfNotPresent # Use local images for now
+          ports:
+            - containerPort: 5000 # Flaskr uses the default port used by flask
+          # Mount volume to persist database data
+          volumeMounts:
+            - name: flaskr-data
+              mountPath: /usr/local/var/flaskr-instance
+      # Create volume from persistent volume claim defined in web-pvc.yaml
+      volumes:
+        - name: flaskr-data
+          persistentVolumeClaim:
+            claimName: flaskr-data
+
