@@ -46,11 +46,11 @@ jobs:
             - name: Install Trivy
               uses: aquasecurity/trivy-action@0.34.1
             - name: Run filesystem scan for vulnerabilities
-              run: |
-                  trivy fs . \
-                    --severity HIGH,CRITICAL \
-                    --exit-code 1 \
-                    --no-progress
+              with:
+                  scan-type: 'fs'
+                  scan-ref: '.'
+                  severity: 'HIGH,CRITICAL'
+                  exit-code: '1'
     build:
         runs-on: ubuntu-latest
         needs: tests
