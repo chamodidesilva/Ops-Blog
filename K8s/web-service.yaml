@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flaskr-service
+spec:
+  type: NodePort # Use node ip, port to expose pods with label 'web'
+  selector:
+    app: web
+  ports:
+    - port: 5000 # Port used by the service itself to direct traffic
+      targetPort: 5000 # Port inside the pod to receive traffic
+

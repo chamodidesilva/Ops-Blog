@@ -1,0 +1,12 @@
+apiVersion: v1
+# Claim storage resource from the cluster. If not present, storage is dynamically created
+kind: PersistentVolumeClaim
+metadata:
+  name: flaskr-data
+spec:
+  accessModes:
+    - ReadWriteOnce # Can only be mounted by one node at a time
+  resources:
+    requests:
+      storage: 1Gi
+
