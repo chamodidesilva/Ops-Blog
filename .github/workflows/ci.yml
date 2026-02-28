@@ -38,7 +38,7 @@ jobs:
                   python3 -m pip install -r requirements-dev.txt
             - name: Run functional tests
               run: python3 -m pytest --cov=flaskr tests/ --cov-fail-under=70
-    file_scanning:
+    file-scanning:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
@@ -57,3 +57,11 @@ jobs:
             - uses: actions/checkout@v4
             - name: Build docker image
               run: docker build -t chamodide/flask-app:${{github.sha}} .
+            - name: Scan image for vulnerabilities
+              uses: aquasecurity/trivy-action@master
+              with:
+                  image-ref: chamodide/flask-app:${{github.sha}}
+                  ignore-unfixed: true    
+                  vuln-type: os,library   
+                  severity: 'HIGH,CRITICAL'
+                  exit-code: '1'
