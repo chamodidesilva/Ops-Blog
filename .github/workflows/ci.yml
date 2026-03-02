@@ -56,7 +56,7 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             - name: Build docker image
-              run: docker build -t chamodide/flask-app:${{github.sha}} .
+              run: docker build --pull -t chamodide/flask-app:${{github.sha}} .
             - name: Scan image for vulnerabilities
               uses: aquasecurity/trivy-action@master
               with:

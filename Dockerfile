@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.14-slim
 
 WORKDIR /usr/local/app
 
@@ -13,3 +13,4 @@ RUN chmod +x entrypoint.sh
 EXPOSE 5000
 
 ENTRYPOINT ["/usr/local/app/entrypoint.sh"]
+
