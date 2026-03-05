@@ -16,8 +16,9 @@ The CI pipeline is designed to:
 - Automatically validate every code commit
 - Enforce coding standards using linting
 - Detect bugs early using automated unit tests
+- Run security scans to detect vulnerabilities
 - Ensure the application can be successfully containerized
-- Act as a quality gate before merging into `staging` or `main`
+- Act as a quality gate before merging changes into `staging` or `main`
 
 ---
 
@@ -37,11 +38,12 @@ This ensures that both feature development and integration branches are continuo
 
 ## CI Pipeline Architecture
 
-The CI pipeline consists of three independent jobs executed on separate runners:
+The CI pipeline consists of the following jobs:
 
-1. Linting Job
-2. Testing Job
-3. Docker Build Job
+1. Code linting
+2. Functionality testing
+4. Security scanning
+3. Image build
 
 
 ```mermaid
@@ -132,7 +134,35 @@ Image publishing will be added as part of the CD pipeline.
 
 ---
 
-## Branch Protection and Quality Gates
+## Security
+
+2 types of vulnerability scanning is integrated to the pipeline: Filesystem scanning, Image scanning. 
+
+### Filesystem Scanning
+
+This scan runs as a separate job and includes:
+- Detecting and scanning dependency files like requirements.txt and checking for vulnerabilites in packages 
+- Scanning for hardcoded credentials/secrets
+- Scanning configuration files like Dockerfile and Kubernetes manifests for security vulnerabilites exposed from misconfigurations
+
+The scans results are filtered by severity and outputs vulnerabilites with severity levels:'HIGH', 'CRITICAL' and exits the pipeline with an exit code if any vulnerabilites are found. 
+
+### Image Scanning
+
+This scan runs as part of the build stage as image is stored locally on the runner. 
+
+This scan detects vulnerabilites in:
+- OS (Debain based) level packages in the base image
+- language-specific (Python) library dependencies
+
+The scan ignores vulnerabilites with no available fix yet and filters results based on the severity levels: 'HIGH', 'CRITICAL'. The pipeline is exited with a code if any vulnerabilites are found. 
+
+**Tools Used:**
+- Trivy
+
+---
+
+### Branch Protection
 
 The `main` and `staging` branches are protected with the following rules:
 
@@ -150,7 +180,6 @@ The following enhancements are planned for the Continuous Deployment phase:
 - Push Docker images to container registry
 - Deploy to production on `main` branch merge
 
-
 ---
 
 ## Related Files
@@ -161,3 +190,4 @@ The following enhancements are planned for the Continuous Deployment phase:
 - `Dockerfile` — Application container configuration
 - `requirements.txt` — Runtime dependencies
 - `requirements-dev.txt` — Development and testing dependencies
+
