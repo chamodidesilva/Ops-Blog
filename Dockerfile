@@ -1,6 +1,7 @@
 FROM python:3.14-slim
 
-RUN useradd -m -s /bin/bash flaskruser  
+RUN groupadd -g 1000 flaskrgroup && \
+    useradd -u 1000 -g flaskrgroup -m -s /bin/bash flaskruser
 
 WORKDIR /usr/local/app
 
@@ -10,9 +11,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN chown -R flaskruser:flaskruser /usr/local/app
+RUN chown -R 1000:1000 /usr/local/app
 
-USER flaskruser
+USER 1000
 
 RUN chmod +x entrypoint.sh
 

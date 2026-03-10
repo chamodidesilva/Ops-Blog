@@ -24,6 +24,8 @@ spec:
               mountPath: /usr/local/var/flaskr-instance
           securityContext:
               readOnlyRootFilesystem: true
+              runAsNonRoot: true
+              runAsUser: 1000
       # Create volume from persistent volume claim defined in web-pvc.yaml
       volumes:
         - name: flaskr-data
