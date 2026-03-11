@@ -12,6 +12,9 @@ spec:
       labels:
         app: web
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: flaskr
           image: deploy-ops-blog:latest
@@ -23,9 +26,14 @@ spec:
             - name: flaskr-data
               mountPath: /usr/local/var/flaskr-instance
           securityContext:
+              privileged: false
+              allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               runAsNonRoot: true
               runAsUser: 1000
+              capabilities:
+                drop: 
+                  - ALL
       # Create volume from persistent volume claim defined in web-pvc.yaml
       volumes:
         - name: flaskr-data
