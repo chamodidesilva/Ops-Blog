@@ -19,6 +19,12 @@ spec:
         - name: flaskr
           image: deploy-ops-blog:latest
           imagePullPolicy: IfNotPresent # Use local images for now
+          env:
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: flask-secret
+                  key: SECRET_KEY
           ports:
             - containerPort: 5000 # Flaskr uses the default port used by flask
           # Mount volume to persist database data
