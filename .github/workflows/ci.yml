@@ -5,6 +5,11 @@ on:
         branches: [ staging, main ]
     push:
         branches: [ staging, main, feat/* ]
+
+permissions:
+  id-token: write   #for OIDC
+  contents: read    
+
 jobs:
     linting:
         runs-on: ubuntu-latest
@@ -61,12 +66,25 @@ jobs:
             - name: Set image tag
               id: tag
               run: echo "image_tag=flask-app:${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
-                
-            - name: Build image
-              run: |
-                echo "Tag: ${{ steps.tag.outputs.image_tag }}"
-                docker build --pull -t ${{ steps.tag.outputs.image_tag }} .
 
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+                aws-region: ${{ secrets.AWS_REGION }}
+
+            - name: Login to Amazon ECR
+              id: login-ecr
+              uses: aws-actions/amazon-ecr-login@v2
+                
+            - name: Build and push image
+              env:
+                REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+                REPOSITORY: ops-blog/flask-app
+              run: |
+                docker build --pull -t $REGISTRY/$REPOSITORY:${{ steps.tag.outputs.image_tag }} .
+                docker push $REGISTRY/$REPOSITORY:${{ steps.tag.outputs.image_tag }}
+                
             - name: Scan image
               uses: aquasecurity/trivy-action@master
               with:
