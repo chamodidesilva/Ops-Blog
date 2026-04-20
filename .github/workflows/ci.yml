@@ -58,17 +58,19 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
 
-            - name: Set short sha
-              id: vars
-              run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
+            - name: Set image tag
+              id: tag
+              run: echo "image_tag=flask-app:${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+                
             - name: Build image
-              run: docker build --pull -t flask-app:${{ steps.vars.outputs.short_sha }} .
+              run: |
+                echo "Tag: ${{ steps.tag.outputs.image_tag }}"
+                docker build --pull -t ${{ steps.tag.outputs.image_tag }} .
 
-            - name: Scan image for vulnerabilities
+            - name: Scan image
               uses: aquasecurity/trivy-action@master
               with:
-                  image-ref: chamodide/flask-app:${{github.sha}}
+                  image-ref: ${{ steps.tag.outputs.image_tag }}
                   ignore-unfixed: true    
                   vuln-type: os,library   
                   severity: 'HIGH,CRITICAL'
