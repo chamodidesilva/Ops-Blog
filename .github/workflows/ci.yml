@@ -67,6 +67,18 @@ jobs:
               id: tag
               run: echo "image_tag=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
 
+            - name: Build image
+              run: docker build --pull -t flask-app:${{github.sha}} .
+
+            - name: Scan image
+              uses: aquasecurity/trivy-action@master
+              with:
+                  image-ref: flask-app:${{github.sha}}
+                  ignore-unfixed: true    
+                  vuln-type: os,library   
+                  severity: 'HIGH,CRITICAL'
+                  exit-code: '1'
+
             - name: Configure AWS credentials
               uses: aws-actions/configure-aws-credentials@v6
               with:
@@ -78,21 +90,14 @@ jobs:
               id: login-ecr
               uses: aws-actions/amazon-ecr-login@v2
                 
-            - name: Build and push image
+            - name: Push image
               env:
                 REGISTRY: ${{ steps.login-ecr.outputs.registry }}
                 REPOSITORY: ops-blog/flask-app
               run: |
-                docker build --pull -t $REGISTRY/$REPOSITORY:${{ steps.tag.outputs.image_tag }} .
+                docker tag flask-app:${{github.sha}} $REGISTRY/$REPOSITORY:${{ steps.tag.outputs.image_tag }}
                 docker push $REGISTRY/$REPOSITORY:${{ steps.tag.outputs.image_tag }}
                 
-            - name: Scan image
-              uses: aquasecurity/trivy-action@master
-              with:
-                  image-ref: ${{ steps.tag.outputs.image_tag }}
-                  ignore-unfixed: true    
-                  vuln-type: os,library   
-                  severity: 'HIGH,CRITICAL'
-                  exit-code: '1'
+            
 
               
