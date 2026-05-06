@@ -95,11 +95,19 @@ resource "aws_ecs_task_definition" "flask_app" {
   }
 }
 
+resource "time_sleep" "wait_for_DNS" {
+  depends_on = [aws_efs_mount_target.flask_efs_mount]
+
+  create_duration = "75s"
+}
+
 resource "aws_ecs_service" "flask_service" {
   name            = "flask-service"
   cluster         = aws_ecs_cluster.flask_cluster.id
   task_definition = aws_ecs_task_definition.flask_app.arn
   desired_count   = 1
+
+  depends_on = [time_sleep.wait_for_DNS]
 
   capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"
