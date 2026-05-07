@@ -5,6 +5,11 @@ on:
         branches: [ staging, main ]
     push:
         branches: [ staging, main, feat/* ]
+
+permissions:
+  id-token: write   #for OIDC
+  contents: read    
+
 jobs:
     linting:
         runs-on: ubuntu-latest
@@ -51,18 +56,48 @@ jobs:
                   scanners: 'vuln,secret,misconfig'
                   severity: 'HIGH,CRITICAL'
                   exit-code: '1'
-    build:
+    build-and-push:
         runs-on: ubuntu-latest
         needs: tests
         steps:
-            - uses: actions/checkout@v4
-            - name: Build docker image
-              run: docker build --pull -t chamodide/flask-app:${{github.sha}} .
-            - name: Scan image for vulnerabilities
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Get short SHA for image tag
+              id: tag
+              run: echo "image_tag=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+
+            - name: Build image
+              run: docker build --pull -t flask-app:${{github.sha}} .
+
+            - name: Scan image
               uses: aquasecurity/trivy-action@master
               with:
-                  image-ref: chamodide/flask-app:${{github.sha}}
+                  image-ref: flask-app:${{github.sha}}
                   ignore-unfixed: true    
                   vuln-type: os,library   
                   severity: 'HIGH,CRITICAL'
                   exit-code: '1'
+
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v6
+              with:
+                role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+                aws-region: ${{ secrets.AWS_REGION }}
+                audience: sts.amazonaws.com
+
+            - name: Login to Amazon ECR
+              id: login-ecr
+              uses: aws-actions/amazon-ecr-login@v2
+                
+            - name: Push image to ECR repo
+              env:
+                REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+                REPOSITORY: ops-blog/flask-app
+              run: |
+                docker tag flask-app:${{github.sha}} $REGISTRY/$REPOSITORY:${{ steps.tag.outputs.image_tag }}
+                docker push $REGISTRY/$REPOSITORY:${{ steps.tag.outputs.image_tag }}
+                
+            
+
+              
