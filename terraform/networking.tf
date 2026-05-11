@@ -62,11 +62,35 @@ resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {
   to_port           = 5000
 }
 
-resource "aws_vpc_security_group_egress_rule" "allow_outbound_to_efs" {
+resource "aws_vpc_security_group_egress_rule" "efs_outbound" {
   security_group_id = aws_security_group.flask_sg.id
   referenced_security_group_id = aws_security_group.flask_efs_sg.id
   from_port         = 2049
-  ip_protocol       = "tcp"
   to_port           = 2049
+  ip_protocol       = "tcp"
+}
+
+resource "aws_vpc_security_group_egress_rule" "https_outbound" {
+  security_group_id = aws_security_group.flask_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+}
+
+resource "aws_vpc_security_group_egress_rule" "DNS_tcp_outbound" {
+  security_group_id = aws_security_group.flask_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 53
+  to_port           = 53
+  ip_protocol       = "tcp"
+}
+
+resource "aws_vpc_security_group_egress_rule" "DNS_udp_outbound" {
+  security_group_id = aws_security_group.flask_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 53
+  to_port           = 53
+  ip_protocol       = "udp"
 }
 
