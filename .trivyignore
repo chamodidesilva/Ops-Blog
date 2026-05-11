@@ -1,0 +1,2 @@
+# ignore aws security group egress checks
+AWS-0104

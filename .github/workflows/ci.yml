@@ -90,7 +90,7 @@ jobs:
               id: login-ecr
               uses: aws-actions/amazon-ecr-login@v2
                 
-            - name: Push image to ECR repo
+            - name: Push image to ECR
               env:
                 REGISTRY: ${{ steps.login-ecr.outputs.registry }}
                 REPOSITORY: ops-blog/flask-app
