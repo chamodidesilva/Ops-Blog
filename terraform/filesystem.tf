@@ -2,6 +2,7 @@ resource "aws_efs_file_system" "flask_efs" {
   creation_token = "ops-blog-efs"
   # one zone EFS
   availability_zone_name = var.subnet_az
+  encrypted = true
   tags = {
     Project = "Ops-Blog"
   }
