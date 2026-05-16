@@ -13,9 +13,6 @@ jobs:
     Deploy:
         runs-on: ubuntu-latest
         # if: ${{ github.event.workflow_run.conclusion == 'success' }}
-        defaults:
-          run:
-            working-directory: ./terraform # only affect the run commands
         steps:
             - name: Sleep for 30 seconds
               run: sleep 2m 30s
@@ -40,12 +37,15 @@ jobs:
                 terraform_version: "1.15.2"
 
             - name: Initialize Terraform
+              working-directory: ./terraform
               run: terraform init -no-color
 
             - name: Validate Terraform configuration
+              working-directory: ./terraform
               run: terraform validate -no-color
 
             - name: Plan Terraform deployment   
+              working-directory: ./terraform
               run: terraform plan -no-color -out=tfplan
               env:
                   TF_VAR_ecr_image_tag: ${{ steps.tag.outputs.image_tag }}
@@ -56,5 +56,6 @@ jobs:
                   TF_VAR_subnet_az: ${{ secrets.SUBNET_AZ }}
 
             - name: Apply Terraform deployment
+              working-directory: ./terraform
               run: terraform apply tfplan
               
