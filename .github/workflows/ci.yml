@@ -58,7 +58,7 @@ jobs:
                   exit-code: '1'
     build-and-push:
         runs-on: ubuntu-latest
-        needs: tests
+        needs: [linting, tests, filesystem_scanning]
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
