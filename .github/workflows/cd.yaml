@@ -1,7 +1,5 @@
 name: CD
-# on:
-#     workflow_dispatch:
-#     push:
+
 on:
     workflow_dispatch:
     workflow_run:
@@ -18,9 +16,6 @@ jobs:
         runs-on: ubuntu-latest
         if: ${{ github.event.workflow_run.conclusion == 'success' }}
         steps:
-            # - name: Sleep for 30 seconds
-            #   run: sleep 2m 30s
-
             - name: Checkout code
               uses: actions/checkout@v4
 
@@ -53,7 +48,6 @@ jobs:
               run: terraform plan -no-color -out=tfplan
               env:
                   TF_VAR_ecr_image_tag: ${{ steps.tag.outputs.image_tag }}
-                  # TF_VAR_ecr_image_tag: ${{ secrets.ECR_IMAGE_TAG }}
                   TF_VAR_acc_id: ${{ secrets.ACC_ID }}
                   TF_VAR_region: ${{ secrets.AWS_REGION }}
                   TF_VAR_flask_secret_value: ${{ secrets.FLASK_SECRET_VALUE }}
