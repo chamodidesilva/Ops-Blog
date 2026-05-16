@@ -1,15 +1,18 @@
 name: CD
 on:
     workflow_dispatch:
-    workflow_run:
-        workflows: ["CI"]
-        types:
-            - completed
+    push:
+# on:
+#     workflow_dispatch:
+#     workflow_run:
+#         workflows: ["CI"]
+#         types:
+#             - completed
 
 jobs:
     Deploy:
         runs-on: ubuntu-latest
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        # if: ${{ github.event.workflow_run.conclusion == 'success' }}
         defaults:
           run:
             working-directory: ./terraform # only affect the run commands
