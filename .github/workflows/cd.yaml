@@ -8,6 +8,9 @@ on:
 #         workflows: ["CI"]
 #         types:
 #             - completed
+permissions:
+  id-token: write   #for OIDC
+  contents: read   
 
 jobs:
     Deploy:
