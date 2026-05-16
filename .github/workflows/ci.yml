@@ -1,10 +1,10 @@
 name: CI 
 on:
     workflow_dispatch:
-    # pull_request:
-    #     branches: [ staging, main ]
-    # push:
-    #     branches: [ staging, main, feat/* ]
+    pull_request:
+        branches: [ staging, main ]
+    push:
+        branches: [ staging, main, feat/* ]
 
 permissions:
   id-token: write   #for OIDC
