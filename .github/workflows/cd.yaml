@@ -17,6 +17,9 @@ jobs:
           run:
             working-directory: ./terraform # only affect the run commands
         steps:
+            - name: Sleep for 30 seconds
+              run: sleep 2m 30s
+
             - name: Checkout code
               uses: actions/checkout@v4
 
