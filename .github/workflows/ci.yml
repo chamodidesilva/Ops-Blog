@@ -59,12 +59,14 @@ jobs:
     build-and-push:
         runs-on: ubuntu-latest
         needs: [linting, tests, filesystem_scanning]
+        outputs:
+          tag: ${{ steps.get-tag.outputs.image_tag }}
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
 
             - name: Get short SHA for image tag
-              id: tag
+              id: get-tag
               run: echo "image_tag=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
 
             - name: Build image
@@ -95,9 +97,14 @@ jobs:
                 REGISTRY: ${{ steps.login-ecr.outputs.registry }}
                 REPOSITORY: ops-blog/flask-app
               run: |
-                docker tag flask-app:${{github.sha}} $REGISTRY/$REPOSITORY:${{ steps.tag.outputs.image_tag }}
-                docker push $REGISTRY/$REPOSITORY:${{ steps.tag.outputs.image_tag }}
+                docker tag flask-app:${{github.sha}} $REGISTRY/$REPOSITORY:${{ steps.get-tag.outputs.image_tag }}
+                docker push $REGISTRY/$REPOSITORY:${{ steps.get-tag.outputs.image_tag }}
                 
-            
+    Deploy:
+        runs-on: ubuntu-latest
+        needs: build-and-push
+        uses: ./.github/workflows/cd.yaml
+        with:
+          image_tag: ${{ needs.build-and-push.outputs.tag }}      
 
               
