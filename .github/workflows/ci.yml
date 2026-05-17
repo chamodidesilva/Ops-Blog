@@ -100,11 +100,10 @@ jobs:
                 docker tag flask-app:${{github.sha}} $REGISTRY/$REPOSITORY:${{ steps.get-tag.outputs.image_tag }}
                 docker push $REGISTRY/$REPOSITORY:${{ steps.get-tag.outputs.image_tag }}
                 
-    Deploy:
-        runs-on: ubuntu-latest
+    deploy:
         needs: build-and-push
         uses: ./.github/workflows/cd.yaml
         with:
-          image_tag: ${{ needs.build-and-push.outputs.tag }}      
+            image_tag: ${{ needs.build-and-push.outputs.tag }}      
 
               
