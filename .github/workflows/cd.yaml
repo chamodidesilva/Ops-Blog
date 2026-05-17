@@ -3,10 +3,10 @@ name: CD
 on:
     workflow_dispatch:
     workflow_call:
-    inputs:
-      image_tag:
-        required: true
-        type: string
+      inputs:
+        image_tag:
+          required: true
+          type: string
 
 permissions:
   id-token: write   #for OIDC
