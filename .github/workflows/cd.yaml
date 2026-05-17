@@ -30,7 +30,7 @@ jobs:
               uses: aws-actions/configure-aws-credentials@v6
               with:
                 role-to-assume: ${{ secrets.AWS_TF_ROLE_ARN }}
-                aws-region: ${{ secrets.AWS_REGION }}
+                aws-region: ${{ secrets.REGION }}
                 audience: sts.amazonaws.com
 
             - name: Setup Terraform
@@ -52,7 +52,7 @@ jobs:
               env:
                   TF_VAR_ecr_image_tag: ${{ inputs.image_tag }}
                   TF_VAR_acc_id: ${{ secrets.ACC_ID }}
-                  TF_VAR_region: ${{ secrets.AWS_REGION }}
+                  TF_VAR_region: ${{ secrets.REGION }}
                   TF_VAR_flask_secret_value: ${{ secrets.FLASK_SECRET_VALUE }}
                   TF_VAR_allowed_ips: ${{ secrets.ALLOWED_IPS }}
                   TF_VAR_subnet_az: ${{ secrets.SUBNET_AZ }}
