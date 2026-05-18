@@ -104,6 +104,7 @@ jobs:
         needs: build-and-push
         uses: ./.github/workflows/cd.yaml
         with:
-            image_tag: ${{ needs.build-and-push.outputs.tag }}      
+            image_tag: ${{ needs.build-and-push.outputs.tag }}
+        secrets: inherit      
 
               
