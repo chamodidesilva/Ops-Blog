@@ -58,7 +58,7 @@ jobs:
                   TF_VAR_subnet_az: ${{ secrets.SUBNET_AZ }}
 
             - name: Exit before apply 
-              run: exit 0
+              run: exit 1
 
             - name: Apply Terraform deployment
               working-directory: ./terraform
