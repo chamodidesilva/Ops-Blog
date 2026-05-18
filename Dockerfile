@@ -1,4 +1,5 @@
-FROM python:3.14-slim
+# FROM python:3.14-slim
+FROM python:3.14.5-slim-trixie
 
 # update specific debian 13 packages due to vulnerabilities not yet fixed in the base image
 # RUN apt-get update && apt-get install -y --no-install-recommends \
