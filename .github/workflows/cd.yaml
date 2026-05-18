@@ -1,0 +1,66 @@
+name: CD
+
+on:
+    workflow_dispatch:
+    workflow_call:
+      inputs:
+        image_tag:
+          required: true
+          type: string
+
+permissions:
+  id-token: write   #for OIDC
+  contents: read   
+
+jobs:
+    Deploy:
+        runs-on: ubuntu-latest
+        # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              # with:
+              #     ref: ${{ github.event.workflow_run.head_branch }}
+
+            # - name: Get short SHA for image tag
+            #   id: tag
+            #   run: echo "image_tag=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v6
+              with:
+                role-to-assume: ${{ secrets.AWS_TF_ROLE_ARN }}
+                aws-region: ${{ secrets.AWS_REGION }}
+                audience: sts.amazonaws.com
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v4
+              with:
+                terraform_version: "1.15.2"
+
+            - name: Initialize Terraform
+              working-directory: ./terraform
+              run: terraform init -no-color
+
+            - name: Validate Terraform configuration
+              working-directory: ./terraform
+              run: terraform validate -no-color
+
+            - name: Plan Terraform deployment   
+              working-directory: ./terraform
+              run: terraform plan -no-color -out=tfplan
+              env:
+                  TF_VAR_ecr_image_tag: ${{ inputs.image_tag }}
+                  TF_VAR_acc_id: ${{ secrets.ACC_ID }}
+                  TF_VAR_region: ${{ secrets.AWS_REGION }}
+                  TF_VAR_flask_secret_value: ${{ secrets.FLASK_SECRET_VALUE }}
+                  TF_VAR_allowed_ips: ${{ secrets.ALLOWED_IPS }}
+                  TF_VAR_subnet_az: ${{ secrets.SUBNET_AZ }}
+
+            - name: Exit before apply 
+              run: exit 1
+
+            - name: Apply Terraform deployment
+              working-directory: ./terraform
+              run: terraform apply tfplan
+              
