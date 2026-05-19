@@ -3,8 +3,10 @@ on:
     workflow_dispatch:
     pull_request:
         branches: [ develop, main ]
-    push:
-        branches: [ develop, main, feat/* ]
+        types: [opened]
+        paths: 
+          - 'flaskr/**'
+          - 'Dockerfile'
 
 permissions:
   id-token: write   #for OIDC
@@ -102,7 +104,7 @@ jobs:
                 
     deploy:
         needs: build-and-push
-        uses: ./.github/workflows/cd.yaml
+        uses: ./.github/workflows/infra-pipeline.yaml
         with:
             image_tag: ${{ needs.build-and-push.outputs.tag }}
         secrets: inherit      

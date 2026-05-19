@@ -7,6 +7,16 @@ on:
         image_tag:
           required: true
           type: string
+          default: ''
+
+    push:
+        branches: [ feat/* ]
+
+    pull_request:
+        branches: [ develop ]
+        types: [opened]
+        paths: 
+          - 'terraform/**'
 
 permissions:
   id-token: write   #for OIDC
@@ -15,16 +25,9 @@ permissions:
 jobs:
     Deploy:
         runs-on: ubuntu-latest
-        # if: ${{ github.event.workflow_run.conclusion == 'success' }}
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
-              # with:
-              #     ref: ${{ github.event.workflow_run.head_branch }}
-
-            # - name: Get short SHA for image tag
-            #   id: tag
-            #   run: echo "image_tag=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
 
             - name: Configure AWS credentials
               uses: aws-actions/configure-aws-credentials@v6
@@ -50,17 +53,16 @@ jobs:
               working-directory: ./terraform
               run: terraform plan -no-color -out=tfplan
               env:
-                  TF_VAR_ecr_image_tag: ${{ inputs.image_tag }}
+                  # change ecr image tag based on whether the workflow is triggered by a workflow_call or not
+                  TF_VAR_ecr_image_tag: ${{ inputs.image_tag || secrets.INFRA_TEST_TAG }}
                   TF_VAR_acc_id: ${{ secrets.ACC_ID }}
                   TF_VAR_region: ${{ secrets.AWS_REGION }}
                   TF_VAR_flask_secret_value: ${{ secrets.FLASK_SECRET_VALUE }}
                   TF_VAR_allowed_ips: ${{ secrets.ALLOWED_IPS }}
                   TF_VAR_subnet_az: ${{ secrets.SUBNET_AZ }}
 
-            - name: Exit before apply 
-              run: exit 1
-
             - name: Apply Terraform deployment
+              if: github.event_name == 'workflow_call'
               working-directory: ./terraform
               run: terraform apply tfplan
               
