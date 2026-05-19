@@ -1,4 +1,4 @@
-name: CD
+name: Infrastructure Pipeline
 
 on:
     workflow_dispatch:
@@ -8,9 +8,6 @@ on:
           required: true
           type: string
           default: ''
-
-    push:
-        branches: [ feat/* ]
 
     pull_request:
         branches: [ develop ]

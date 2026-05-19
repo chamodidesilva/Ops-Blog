@@ -1,6 +1,6 @@
 FROM python:3.14-slim
 
-# update specific debian 13 packages due to vulnerabilities not yet fixed in the base image
+# Update specific debian 13 packages due to vulnerabilities not yet fixed in the base image
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libcap2 \
     libsystemd0 \
