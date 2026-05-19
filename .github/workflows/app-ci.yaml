@@ -2,10 +2,11 @@ name: App CI
 on:
     workflow_dispatch:
     pull_request:
-        branches: [ develop, main ]
-        types: [opened]
+      - branches: [main]
+      - branches: [develop]
+        types: [opened, synchronize]
         paths: 
-          - 'flaskr/**'
+          - 'flaskr/**' 
           - 'Dockerfile'
 
 permissions:
