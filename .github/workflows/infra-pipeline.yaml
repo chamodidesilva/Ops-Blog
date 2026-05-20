@@ -63,7 +63,6 @@ jobs:
               run: terraform show -json tfplan > tfplan.json
 
             - name: Run Trivy scan on Terraform Plan
-              working-directory: ./terraform
               uses: aquasecurity/trivy-action@0.35.0
               with:
                   scan-type: 'config'          
