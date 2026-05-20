@@ -17,7 +17,7 @@ resource "aws_efs_mount_target" "flask_efs_mount" {
 resource "aws_efs_access_point" "flask_efs_access" {
   file_system_id = aws_efs_file_system.flask_efs.id
 
-  # matches the user specified in the Dockerfile
+  # matches user specified in the Dockerfile
   posix_user {
     uid = 1000
     gid = 1000 
