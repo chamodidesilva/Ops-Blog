@@ -39,9 +39,11 @@ jobs:
     test-job:
         needs: detect-changes
         runs-on: ubuntu-latest
-        run: |
-          echo "Run App CI: ${{ needs.detect-changes.outputs.run-app-ci }}"
-          exit 1
+        steps:
+            - name: Check output of detect-changes job
+              run: |
+                echo "Run App CI: ${{ needs.detect-changes.outputs.run-app-ci }}"
+                exit 1
 
     linting:
         needs: detect-changes
