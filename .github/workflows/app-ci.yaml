@@ -2,21 +2,43 @@ name: App CI
 on:
     workflow_dispatch:
     pull_request:
-      - branches: 
-          - main
-      - branches: 
-          - develop
+      - branches: [develop, main]
         types: [opened, synchronize]
-        paths: 
-          - 'flaskr/**' 
-          - 'Dockerfile'
 
 permissions:
   id-token: write   #for OIDC
   contents: read    
 
 jobs:
+    detect-changes:
+        runs-on: ubuntu-latest
+        outputs:
+          run-app-ci: ${{ steps.filter.outputs.run-app-ci }}
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v4
+
+          - name: Analyze git diff of PR
+            uses: dorny/paths-filter@v4
+            id: filter
+            with:
+              filters: |
+                app_modified:
+                  - 'flaskr/**'
+                  - 'Dockerfile'
+
+          - name: Set Decision Output
+            id: decision
+            run: |
+              if [ "${{ github.base_ref }}" = "main" ] || [ "${{ steps.filter.outputs.app_modified }}" = "true" ]; then
+                echo "run-app-ci=true" >> $GITHUB_OUTPUT
+              else
+                echo "run-app-ci=false" >> $GITHUB_OUTPUT
+              fi
+
     linting:
+        needs: detect-changes
+        if: ${{ needs.detect-changes.outputs.run-app-ci == 'true' }}
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
@@ -32,7 +54,10 @@ jobs:
                   python3 -m pip install -r requirements-dev.txt
             - name: Run linting tests
               run: flake8 flaskr/
+              
     tests:
+        needs: detect-changes
+        if: ${{ needs.detect-changes.outputs.run-app-ci == 'true' }}
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
@@ -48,7 +73,10 @@ jobs:
                   python3 -m pip install -r requirements-dev.txt
             - name: Run functional tests
               run: python3 -m pytest --cov=flaskr tests/ --cov-fail-under=70
+
     filesystem_scanning:
+        needs: detect-changes
+        if: ${{ needs.detect-changes.outputs.run-app-ci == 'true' }}
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
@@ -61,9 +89,11 @@ jobs:
                   scanners: 'vuln,secret,misconfig'
                   severity: 'HIGH,CRITICAL'
                   exit-code: '1'
+
     build-and-push:
+        needs: [linting, tests, filesystem_scanning, detect-changes]
+        if: ${{ needs.detect-changes.outputs.run-app-ci == 'true' }}
         runs-on: ubuntu-latest
-        needs: [linting, tests, filesystem_scanning]
         outputs:
           tag: ${{ steps.get-tag.outputs.image_tag }}
         steps:
@@ -106,7 +136,8 @@ jobs:
                 docker push $REGISTRY/$REPOSITORY:${{ steps.get-tag.outputs.image_tag }}
                 
     deploy:
-        needs: build-and-push
+        needs: [detect-changes, build-and-push]
+        if: ${{ needs.detect-changes.outputs.run-app-ci == 'true' }}
         uses: ./.github/workflows/infra-pipeline.yaml
         with:
             image_tag: ${{ needs.build-and-push.outputs.tag }}

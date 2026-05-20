@@ -10,8 +10,8 @@ on:
           default: ''
 
     pull_request:
-        branches: [ develop ]
-        types: [opened]
+        branches: [develop]
+        types: [opened, synchronize]
         paths: 
           - 'terraform/**'
 
@@ -57,6 +57,20 @@ jobs:
                   TF_VAR_flask_secret_value: ${{ secrets.FLASK_SECRET_VALUE }}
                   TF_VAR_allowed_ips: ${{ secrets.ALLOWED_IPS }}
                   TF_VAR_subnet_az: ${{ secrets.SUBNET_AZ }}
+
+            - name: Export Terraform Plan to JSON
+              working-directory: ./terraform
+              run: terraform show -json tfplan > tfplan.json
+
+            - name: Run Trivy scan on Terraform Plan
+              working-directory: ./terraform
+              uses: aquasecurity/trivy-action@0.35.0
+              with:
+                  scan-type: 'config'          
+                  scan-ref: 'tfplan.json'      
+                  scanners: 'misconfig'        
+                  severity: 'HIGH,CRITICAL'
+                  exit-code: '1'
 
             - name: Apply Terraform deployment
               if: github.event_name == 'workflow_call'
