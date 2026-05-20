@@ -10,7 +10,7 @@ on:
           default: ''
 
     pull_request:
-        branches: [develop]
+        branches: [develop,main]
         types: [opened, synchronize]
         paths: 
           - 'terraform/**'
