@@ -1,6 +1,5 @@
 data "aws_acm_certificate" "my_cert" {
-  domain   = "opsblog.site"
-  # statuses = ["ISSUED"]     
+  domain   = "opsblog.site"     
   types    = ["IMPORTED"]
   key_types = ["RSA_4096"]
 }
@@ -34,8 +33,8 @@ resource "aws_vpc_security_group_ingress_rule" "allow_https" {
 resource "aws_vpc_security_group_egress_rule" "allow_outbound" {
   security_group_id = aws_security_group.alb_sg.id
   referenced_security_group_id = aws_security_group.flask_sg.id
-  from_port         = 80
-  to_port           = 80
+  from_port         = 5000
+  to_port           = 5000
   ip_protocol       = "tcp"
 }
 
@@ -104,6 +103,7 @@ resource "aws_lb_listener" "https" {
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"  # Modern TLS
   certificate_arn   = data.aws_acm_certificate.my_cert.arn
+
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.flask_tg[0].arn
