@@ -30,7 +30,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_https" {
   to_port           = 443
 }
 
-resource "aws_vpc_security_group_egress_rule" "efs_outbound" {
+resource "aws_vpc_security_group_egress_rule" "ecs_outbound" {
   security_group_id = aws_security_group.alb_sg.id
   referenced_security_group_id = aws_security_group.flask_sg.id
   from_port         = 5000
