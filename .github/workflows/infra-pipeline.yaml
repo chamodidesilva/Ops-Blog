@@ -57,6 +57,7 @@ jobs:
                   TF_VAR_flask_secret_value: ${{ secrets.FLASK_SECRET_VALUE }}
                   TF_VAR_allowed_ips: ${{ secrets.ALLOWED_IPS }}
                   TF_VAR_subnet_az: ${{ secrets.SUBNET_AZ }}
+                  TF_VAR_subnet_az_2: ${{ secrets.SUBNET_AZ_2 }}
 
             - name: Export Terraform Plan to JSON
               working-directory: ./terraform
