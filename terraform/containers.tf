@@ -95,12 +95,14 @@ resource "aws_ecs_task_definition" "flask_app" {
   }
 }
 
-resource "time_sleep" "wait_for_DNS" {
-  count           = var.environment_active ? 1 : 0
-  depends_on = [aws_efs_mount_target.flask_efs_mount]
+# Only needs if EFS mount is recreated
 
-  create_duration = "75s"
-}
+# resource "time_sleep" "wait_for_DNS" {
+#   count           = var.environment_active ? 1 : 0
+#   depends_on = [aws_efs_mount_target.flask_efs_mount]
+
+#   create_duration = "75s"
+# }
 
 resource "aws_ecs_service" "flask_service" {
   count           = var.environment_active ? 1 : 0
@@ -109,7 +111,7 @@ resource "aws_ecs_service" "flask_service" {
   task_definition = aws_ecs_task_definition.flask_app.arn
   desired_count   = 1
 
-  depends_on = [time_sleep.wait_for_DNS]
+  # depends_on = [time_sleep.wait_for_DNS]
 
   capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"
