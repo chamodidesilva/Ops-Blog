@@ -28,3 +28,18 @@ variable "subnet_az" {
   description = "Availability zone for the subnet"
 }
 
+variable "subnet_az_2" {
+  type        = string
+  description = "Availability zone for the second subnet"
+}
+
+# variable "cert_arn" {
+#   type        = string
+#   description = "ARN for the SSL certificate"
+# }
+
+variable "environment_active" {
+  type    = bool
+  default = true
+}
+

@@ -18,6 +18,16 @@ resource "aws_subnet" "public_1" {
   }
 }
 
+resource "aws_subnet" "public_2" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.2.0/24"
+  availability_zone = var.subnet_az_2 
+
+  tags = {
+    Name = "public_2"
+  }
+}
+
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
 
@@ -44,8 +54,13 @@ resource "aws_route_table_association" "rt_assoc" {
   route_table_id = aws_route_table.rt.id
 }
 
+resource "aws_route_table_association" "rt_assoc_2" {
+  subnet_id      = aws_subnet.public_2.id
+  route_table_id = aws_route_table.rt.id
+}
+
 resource "aws_security_group" "flask_sg" {
-  name        = "ops-blog-sg"
+  name        = "ops-blog-sg-ecs"
   description = "Restrict access to ECS task"
   vpc_id      = aws_vpc.main.id
 
@@ -54,9 +69,9 @@ resource "aws_security_group" "flask_sg" {
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {
+resource "aws_vpc_security_group_ingress_rule" "allow_alb" {
   security_group_id = aws_security_group.flask_sg.id
-  cidr_ipv4         = "${var.allowed_ips}/32"
+  referenced_security_group_id = aws_security_group.alb_sg.id
   from_port         = 5000
   ip_protocol       = "tcp"
   to_port           = 5000
