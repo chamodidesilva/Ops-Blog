@@ -69,7 +69,7 @@ resource "aws_security_group" "flask_sg" {
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {
+resource "aws_vpc_security_group_ingress_rule" "allow_alb" {
   security_group_id = aws_security_group.flask_sg.id
   referenced_security_group_id = aws_security_group.alb_sg.id
   from_port         = 5000
