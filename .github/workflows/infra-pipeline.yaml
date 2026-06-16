@@ -73,7 +73,7 @@ jobs:
                   exit-code: '1'
 
             - name: Apply Terraform deployment
-              if: github.event_name == 'workflow_call'
+              # if: github.event_name == 'workflow_call'
               working-directory: ./terraform
               run: terraform apply tfplan
               
