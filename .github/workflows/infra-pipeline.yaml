@@ -72,9 +72,6 @@ jobs:
                   severity: 'HIGH,CRITICAL'
                   exit-code: '1'
 
-            - name: Exit when testing
-              run: exit 2
-
             - name: Apply Terraform deployment
               if: github.event_name == 'workflow_call'
               working-directory: ./terraform
