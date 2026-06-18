@@ -1,7 +1,7 @@
-variable "allowed_ips" {
-  type        = string
-  description = "Restrict ECS task access in security group only to my IP for testing"
-}
+# variable "allowed_ips" {
+#   type        = string
+#   description = "Restrict ECS task access in security group only to my IP for testing"
+# }
 
 variable "flask_secret_value" {
   type        = string
@@ -35,7 +35,7 @@ variable "subnet_az_2" {
 
 # variable "cert_arn" {
 #   type        = string
-#   description = "ARN for the SSL certificate"
+#   description = "ARN for SSL certificate"
 # }
 
 variable "environment_active" {

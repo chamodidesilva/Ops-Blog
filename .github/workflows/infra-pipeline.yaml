@@ -55,7 +55,7 @@ jobs:
                   TF_VAR_acc_id: ${{ secrets.ACC_ID }}
                   TF_VAR_region: ${{ secrets.AWS_REGION }}
                   TF_VAR_flask_secret_value: ${{ secrets.FLASK_SECRET_VALUE }}
-                  TF_VAR_allowed_ips: ${{ secrets.ALLOWED_IPS }}
+                  # TF_VAR_allowed_ips: ${{ secrets.ALLOWED_IPS }}
                   TF_VAR_subnet_az: ${{ secrets.SUBNET_AZ }}
                   TF_VAR_subnet_az_2: ${{ secrets.SUBNET_AZ_2 }}
 
@@ -73,7 +73,7 @@ jobs:
                   exit-code: '1'
 
             - name: Apply Terraform deployment
-              if: github.event_name == 'workflow_call'
+              # if: github.event_name == 'workflow_call'
               working-directory: ./terraform
               run: terraform apply tfplan
               
