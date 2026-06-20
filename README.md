@@ -25,16 +25,17 @@
       <a href="#cloud-infrastructure-architecture">Cloud Infrastructure Architecture</a>
       <ul>
         <li><a href="#high-level-components">High Level Components</a></li>
+        <li><a href="#dynamic-infrastructure-provisioning">Dynamic Infrastructure Provisioning</a></li>
       </ul>
     </li>
-    <li><a href="#iac-deployment">IaC Deployment</a></li>
+    <li><a href="#iac-resource-provisioning">IaC Resource Provisioning</a></li>
     <li><a href="#devops-automation-and-git-workflow">DevOps Automation and Git Workflow</a>
       <ul>
         <li><a href="#automated-pipelines">Automated Pipelines</a></li>
         <li><a href="#git-strategy">Git Strategy</a></li>
       </ul>
     </li>
-    <li><a href="#live-demo-on-demand-provisioning">Live Demo: On-Demand Provisioning</a></li>
+    <li><a href="#request-a-demo">Request a Demo</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
