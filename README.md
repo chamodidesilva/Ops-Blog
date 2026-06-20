@@ -109,7 +109,7 @@ The **application delivery layer** is not kept running by default and is provisi
 
 Terraform code is organized by AWS infrastructure category (e.g., networking, configuration, file systems, load balancing, and containers) for easier maintenance, while Terraform state is managed remotely in Amazon S3.
 
-Terraform configuration is designed to conditionally destroy resources to adhere to the cost-concious design. The conditional behaviour is implemented using the **count** meta argument paired with the variable, **`environment_active`**. The default behaviour is to spin up all resources and it can be changed by setting the variable to false to destroy selected resources. 
+Terraform configuration is designed to conditionally destroy resources to adhere to the cost-concious design. The conditional behaviour is implemented using the **count** meta argument paired with the variable, **`environment_active`**. The default behaviour is to spin up all resources and it can be changed by setting the variable to **`false`** to destroy selected resources. 
 
 ---
 
@@ -124,7 +124,7 @@ Pipelines are setup to trigger only on pull request creation and synchronization
 
 ### Git Strategy
 * **Branching Strategy:** Maintained via a clean `main` / `develop` / `feature/*` workflow. 
-* **Standards:** Adheres to [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/) formatting rules and [Conventional Branching](https://conventionalbranch.org/) structures to maintain consistency in naming.
+* **Standards:** Adheres to [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/) formatting rules and [Conventional Branching](https://conventionalbranch.org/) structures to maintain consistency.
 
 ---
 
