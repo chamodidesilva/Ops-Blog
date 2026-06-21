@@ -68,6 +68,8 @@ jobs:
         needs: [detect-changes]
         if: ${{ needs.detect-changes.outputs.run-infra-cd == 'true' }}
         uses: ./.github/workflows/infra-cd.yaml
+        with:
+            image_tag: ${{ secrets.INFRA_TEST_TAG }}
         secrets: inherit
 
     
