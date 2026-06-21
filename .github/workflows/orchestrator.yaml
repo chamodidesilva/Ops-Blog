@@ -4,7 +4,11 @@ on:
     #     branches: [chore/*]
     pull_request:
         branches: [develop, main]
-        types: [opened, synchronize]   
+        types: [opened, synchronize]  
+
+permissions:
+  id-token: write   #for OIDC
+  contents: read  
 
 jobs:
     # test:
@@ -58,7 +62,7 @@ jobs:
         needs: [detect-changes]
         if: ${{ needs.detect-changes.outputs.run-app-ci == 'true' }}
         uses: ./.github/workflows/app-ci.yaml
-        # secrets: inherit 
+        secrets: inherit 
 
     run-infra-cd:
         needs: [detect-changes]
