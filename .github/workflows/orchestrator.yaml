@@ -1,0 +1,68 @@
+name: CI/CD Orchestrator
+on:
+    push:
+        branches: [chore/*]
+    pull_request:
+        branches: [develop, main]
+        types: [opened, synchronize]   
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              run: |
+                echo "Hello"
+                exit 0
+
+    # detect-changes:
+    #     runs-on: ubuntu-latest
+    #     outputs:
+    #       run-app-ci: ${{ steps.app-decision.outputs.run-app-ci }}
+    #       run-infra-cd: ${{ steps.infra-decision.outputs.run-infra-cd }}
+    #     steps:
+    #       - name: Checkout code
+    #         uses: actions/checkout@v4
+
+    #       - name: Analyze git diff of PR
+    #         uses: dorny/paths-filter@v4
+    #         id: filter
+    #         with:
+    #           base: ${{ github.event.before }}
+    #           filters: |
+    #             app_modified:
+    #               - 'flaskr/**'
+    #               - 'Dockerfile'
+    #             infra_modified:
+    #               - 'terraform/**'
+
+    #       - name: Set App CI Decision Output
+    #         id: app-decision
+    #         run: |
+    #           if "${{ steps.filter.outputs.app_modified }}" = "true"; then
+    #             echo "run-app-ci=true" >> $GITHUB_OUTPUT
+    #           else
+    #             echo "run-app-ci=false" >> $GITHUB_OUTPUT
+    #           fi
+
+    #       - name: Set Infrastructure CD Decision Output
+    #         id: infra-decision
+    #         run: |
+    #           if "${{ steps.filter.outputs.infra_modified }}" = "true"; then
+    #             echo "run-infra-cd=true" >> $GITHUB_OUTPUT
+    #           else
+    #             echo "run-infra-cd=false" >> $GITHUB_OUTPUT
+    #           fi
+
+    # run-app-ci:
+    #     needs: [detect-changes]
+    #     if: ${{ needs.detect-changes.outputs.run-app-ci == 'true' }}
+    #     uses: ./.github/workflows/app-ci.yaml
+    #     # secrets: inherit 
+
+    # run-infra-cd:
+    #     needs: [detect-changes]
+    #     if: ${{ needs.detect-changes.outputs.run-infra-cd == 'true' }}
+    #     uses: ./.github/workflows/infra-cd.yaml
+    #     secrets: inherit
+
