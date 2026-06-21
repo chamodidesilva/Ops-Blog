@@ -35,7 +35,7 @@ variable "subnet_az_2" {
 
 # variable "cert_arn" {
 #   type        = string
-#   description = "ARN for SSL certificate"
+#   description = "ARN for public SSL certificate"
 # }
 
 variable "environment_active" {
