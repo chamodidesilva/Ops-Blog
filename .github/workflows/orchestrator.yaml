@@ -39,7 +39,7 @@ jobs:
           - name: Set App CI Decision Output
             id: app-decision
             run: |
-              if "${{ steps.filter.outputs.app_modified }}" = "true"; then
+              if [ "${{ steps.filter.outputs.app_modified }}" = "true" ]; then
                 echo "run-app-ci=true" >> $GITHUB_OUTPUT
               else
                 echo "run-app-ci=false" >> $GITHUB_OUTPUT
@@ -48,7 +48,7 @@ jobs:
           - name: Set Infrastructure CD Decision Output
             id: infra-decision
             run: |
-              if "${{ steps.filter.outputs.infra_modified }}" = "true"; then
+              if [ "${{ steps.filter.outputs.infra_modified }}" = "true" ] && [ "${{ steps.filter.outputs.app_modified }}" != "true" ]; then
                 echo "run-infra-cd=true" >> $GITHUB_OUTPUT
               else
                 echo "run-infra-cd=false" >> $GITHUB_OUTPUT
@@ -65,4 +65,6 @@ jobs:
         if: ${{ needs.detect-changes.outputs.run-infra-cd == 'true' }}
         uses: ./.github/workflows/infra-cd.yaml
         secrets: inherit
+
+    
 
