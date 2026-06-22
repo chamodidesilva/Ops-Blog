@@ -1,0 +1,70 @@
+name: Infrastructure Pipeline
+on:
+    workflow_call:
+      inputs:
+        image_tag:
+          required: false
+          type: string
+          default: ''
+
+permissions:
+  id-token: write   #for OIDC
+  contents: read   
+
+jobs:
+    Deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v6
+              with:
+                role-to-assume: ${{ secrets.AWS_TF_ROLE_ARN }}
+                aws-region: ${{ secrets.AWS_REGION }}
+                audience: sts.amazonaws.com
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v4
+              with:
+                terraform_version: "1.15.2"
+
+            - name: Initialize Terraform
+              working-directory: ./terraform
+              run: terraform init -no-color
+
+            - name: Validate Terraform configuration
+              working-directory: ./terraform
+              run: terraform validate -no-color
+
+            - name: Plan Terraform deployment   
+              working-directory: ./terraform
+              run: terraform plan -no-color -out=tfplan
+              env:
+                  # change ecr image tag based on whether the workflow is triggered by a workflow_call or not
+                  TF_VAR_ecr_image_tag: ${{ inputs.image_tag || secrets.INFRA_TEST_TAG }}
+                  TF_VAR_acc_id: ${{ secrets.ACC_ID }}
+                  TF_VAR_region: ${{ secrets.AWS_REGION }}
+                  TF_VAR_flask_secret_value: ${{ secrets.FLASK_SECRET_VALUE }}
+                  # TF_VAR_allowed_ips: ${{ secrets.ALLOWED_IPS }}
+                  TF_VAR_subnet_az: ${{ secrets.SUBNET_AZ }}
+                  TF_VAR_subnet_az_2: ${{ secrets.SUBNET_AZ_2 }}
+
+            - name: Export Terraform Plan to JSON
+              working-directory: ./terraform
+              run: terraform show -json tfplan > tfplan.json
+
+            - name: Run Trivy scan on Terraform Plan
+              uses: aquasecurity/trivy-action@0.35.0
+              with:
+                  scan-type: 'config'          
+                  scan-ref: './terraform/tfplan.json'      
+                  scanners: 'misconfig'        
+                  severity: 'HIGH,CRITICAL'
+                  exit-code: '1'
+
+            - name: Apply Terraform deployment
+              working-directory: ./terraform
+              run: terraform apply tfplan
+              

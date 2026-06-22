@@ -1,8 +1,10 @@
 <div align="center">
-<h3 align="center">Ops Blog</h3>
-<p>DevOps-focused automation for a Flask blog application</p>
-
-[![CI](https://github.com/chamodidesilva/Ops-Blog/actions/workflows/ci.yml/badge.svg)](https://github.com/chamodidesilva/Ops-Blog/actions/workflows/ci.yml)
+    <picture>
+        <img src="docs/opsblog-logo.png" alt="Project Logo" width="400">
+    </picture>
+    
+[![CI](https://img.shields.io/github/actions/workflow/status/chamodidesilva/Ops-Blog/app-ci.yaml?style=flat-square&label=CI)](https://github.com/chamodidesilva/Ops-Blog/actions/workflows/app-ci.yaml)
+![Release](https://img.shields.io/github/v/release/chamodidesilva/Ops-Blog?style=flat-square)
 ![Last Commit](https://img.shields.io/github/last-commit/chamodidesilva/Ops-Blog?style=flat-square)
 ![Pull Requests](https://img.shields.io/github/issues-pr/chamodidesilva/Ops-Blog?style=flat-square)
 ![Issues](https://img.shields.io/github/issues/chamodidesilva/Ops-Blog?style=flat-square)
@@ -15,186 +17,132 @@
       <a href="#project-overview">Project Overview</a>
       <ul>
         <li><a href="#tech-stack">Tech Stack</a></li>
-        <li><a href="#current-features-v010">Current Features</a></li>
+        <li><a href="#application-capabilities">Application Capabilities</a></li>
+        <li><a href="#the-devops-and-cloud-evolution">The DevOps and Cloud Evolution</a></li>
       </ul>
     </li>
     <li>
-      <a href="#running-locally">Running Locally</a>
+      <a href="#cloud-infrastructure-architecture">Cloud Infrastructure Architecture</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#high-level-components">High Level Components</a></li>
+        <li><a href="#dynamic-infrastructure-provisioning">Dynamic Infrastructure Provisioning</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#usage">Usage</a>
+    <li><a href="#iac-resource-provisioning">IaC Resource Provisioning</a></li>
+    <li><a href="#devops-automation-and-git-workflow">DevOps Automation and Git Workflow</a>
       <ul>
-        <li><a href="#user-authentication">User Authentication</a></li>
-        <li><a href="#blog-functionality">Blog Functionality</a></li>
-        <li><a href="#data-persistence">Data Persistence</a></li>
+        <li><a href="#automated-github-workflow-pipeline">Automated GitHub Workflow Pipeline</a></li>
+        <li><a href="#git-strategy">Git Strategy</a></li>
       </ul>
     </li>
-    <li><a href="#high-level-system-architecture">High Level System Architecture</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#request-a-demo">Request a Demo</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
 ## Project Overview
 
-**Ops Blog** is a personal DevOps-focused learning project built around a blog application created with Flask.
-The primary goal of this repository is not application complexity, but to **design, implement, and evolve real-world DevOps workflows**—including CI/CD, containerization, monitoring, and infrastructure orchestration. This project evolves through clearly versioned releases, each introducing a new operational capability.
-
-The application workload is inspired by the [official Flask blog tutorial](https://flask.palletsprojects.com/en/stable/tutorial/).
+**Ops Blog** is a DevOps-focused learning and showcase project designed to implement, test, and evolve real-world DevOps, Infrastructure as Code (IaC), and Cloud Native workflows. 
+To keep the project focused on DevOps practices and operational aspects of software delivery rather than application development, the application tier uses a customized version of the [official Flask blog tutorial](https://flask.palletsprojects.com/en/stable/tutorial/). 
+The core value of this repository lies entirely in how this standard workload is containerized, secured, automated, and orchestrated across cloud environments.
 
 ### Tech Stack
+* **App Tier:** Python, Flask, SQLite
+* **Infrastructure & Orchestration:** AWS (ECS Fargate, ALB, EFS), Terraform
+* **CI/CD & Security:** GitHub Actions, Trivy, Docker, AWS OIDC
 
-[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=FFD43B)](https://www.python.org/)
-[![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
-[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
-[![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
-
-### Current Features (v0.1.0)
-
-#### Application
+### Application Capabilities
 
 - User authentication with register, login and logout
 - Blog posts: display, create, update and delete
 - SQLite database with persistent storage
 
-#### DevOps and Platform
-- Flask application containerized with Docker
-- Docker compose orchestration
-- Persistent named volume for database
-- CI pipeline with linting, functional tests and test coverage (see docs/ci-cd-pipeline.md)
+### The DevOps and Cloud Evolution
 
-#### Git Workflow
-- Branching strategy: main/staging/feature* 
-- Release strategy:
-  - Development happens on `feature/*` branches
-  - Features are merged into `staging` for integration and validation
-  - Stable changes from `staging` are merged into `main`
-  - Each merge to `main` is tagged using semantic versioning and published as a GitHub release
-- Branch naming follows <a href="https://conventional-branch.github.io/">Conventional Branch</a>
-- Commit naming follows <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a>
+This project is structured chronologically through major releases to demonstrate a practical journey from local development to cloud-native scalability:
 
-## Running Locally
-
-### Prerequisites
-
-- Have Docker, Docker compose installed
-
-### Installation
-
-1. Clone the repo
-   ```sh
-   git clone https://github.com/chamodidesilva/Ops-Blog.git
-   ```
-2. Run docker compose
-   ```sh
-   docker compose up -d
-   ```
-
-## Usage
-
-After starting the application with Docker Compose, access the blog application in your browser: http://127.0.0.1:5000/hello
-
-The home page displays published blog posts.
+* **v0.1.0 (Local Containerization):** Dockerizing the application, managing multi-container states with Docker Compose, and securing persistent local volumes.
+* **v1.0.0 (Cloud Native Infrastructure - Current/Stable):** Transitioning the architecture completely to AWS using Terraform, abstracting networks, automating GitOps provisioning pipelines, and isolating computing layers using serverless containers.
 
 ---
 
-### User Authentication
+## Cloud Infrastructure Architecture
 
-The application supports basic user authentication:
+The application is deployed on AWS using a structured Infrastructure-as-Code footprint managed via Terraform.
 
-- Register a new user account
-- Log in and log out
-- Authenticated users can create, edit, and delete their own blog posts
+<div align="center">
+    <picture>
+        <img src="docs/aws-infra.png" alt="Architecture Diagram">
+    </picture>
+</div>
 
-User sessions are handled by the Flask application.
+### High Level Components:
+* **DNS Routing & Network Security:** A domain name (**opsblog.site**) for this app is registered in an external domain registrar and DNS service provider and connects to an **Application Load Balancer (ALB)** in AWS that manages external HTTP/HTTPS traffic and has a public SSL certificate attached via **Amazon Certificate Manager**. While the workload lives in a public subent intentionally for enabling outbound traffic bypassing the need for a NAT gateway, the network paths are strictly isolated using linked, stateful **Security Groups**.
+* **Identity Management:** IAM roles are created for cross-service access and OIDC federation. ECS utilizes task execution and task roles to pull ECR images, SSM Parameter Store secrets, EFS read/writes and CloudWatch log injections. 
+* **Compute:** **AWS ECS Fargate** processes application workloads in serverless containers and **Fargate Spot** capacity provider strategy ensures further cost savings. 
+* **State & Persistence:** The SQLite database is attached securely to an **Amazon EFS (Elastic File System)** volume, guaranteeing container data survival across rapid tasks updates and secure connections to the file system is achieved through an Access Point. 
+* **Monitoring:** an **Amazon CloudWatch** log group with a retention rule collects logs sent from ECS tasks for quick task failure troubleshooting visibility
+* **Secret Management:** AWS Systems Manager's Parameter Store securely and cost effectively stores the application's session keys.
+
+### Dynamic Infrastructure Provisioning
+
+As this is a showcase project and does not serve production traffic, the core infrastructure is kept in a cost-optimized baseline state. Infrastructure follows a cost-conscious design, keeping only essential AWS resources running while ephemeral components are provisioned on-demand to minimize idle cost, reflecting **FinOps** best practices.
+
+The following components remain deployed and **continuously available**:
+
+* ECS cluster and task definitions
+* Networking (VPC, subnets, routing)
+* Security configurations (Security Groups, IAM roles and policies)
+* Persistent storage (EFS)
+* Container registry (ECR)
+* DNS configuration
+
+The **application delivery layer** is not kept running by default and is provisioned on demand. This includes:
+
+* Application Load Balancer (ALB)
+* Target groups and listeners
+* ECS service (service scheduler layer)
+
+## IaC Resource Provisioning
+
+Terraform code is organized by AWS infrastructure category (e.g., networking, configuration, file systems, load balancing, and containers) for easier maintenance, while Terraform state is managed remotely in Amazon S3.
+
+Terraform configuration is designed to conditionally destroy resources to adhere to the cost-concious design. The conditional behaviour is implemented using the **count** meta argument paired with the variable, **`environment_active`**. The default behaviour is to spin up all resources and it can be changed by setting the variable to **`false`** to destroy selected resources. 
 
 ---
 
-### Blog Functionality
+## DevOps Automation and Git Workflow  
 
-Once logged in, users can perform full CRUD operations on blog posts:
+### Automated GitHub Workflow Pipeline
 
-- **Create** new blog posts
-- **View** existing blog posts on the home page
-- **Update** previously created posts
-- **Delete** posts they own
+Workflow pipeline is setup to trigger only on pull request creation and synchronization and **dorny/paths-filter** action is utilized to detect changes in file paths and selectively trigger the specific downstream workflows. 
 
-Changes are reflected immediately in the UI.
+* **`orchestrator.yaml`:** Executes change detection logic to determine the type of change being introduced via the PR and orchestrate calling the relevant downstream workflow: app-ci or infra-cd via **`workflow_call`** triggers.
+
+* **`app-ci.yaml`:** Triggered on pull requests created for application code/Dockerfile related changes. Automatically executes code linting, code validation, vulnerability scanning via **Trivy**, logs securely into AWS using secure **OIDC**, builds the optimized Docker images, tags and pushes them cleanly to Amazon ECR.
+* **`infra-pipeline.yaml`:** Automates the Terraform code execution and triggers for changes to the **terraform/** directory. Validates configurations, triggers misconfiguration scans, logs securely into AWS, generates execution plan files, and applies changes seamlessly inside AWS environment. 
+
+### Git Strategy
+* **Branching Strategy:** Maintained via a clean `main` / `develop` / `feature/*` workflow. 
+* **Standards:** Adheres to [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/) formatting rules and [Conventional Branching](https://conventionalbranch.org/) structures to maintain consistency.
 
 ---
 
-### Data Persistence
+## Request a Demo
 
-The application uses a SQLite database stored in a Docker named volume.
-
-- Blog posts and user data persist across container restarts
-- Stopping and starting the application does not reset application data
-
-## High Level System Architecture
-
-```mermaid
-graph TB
-    Browser[Web Browser]
-    
-    subgraph Docker["Docker Environment"]
-        DC[Docker Compose]
-        Flask[Flask Blog App<br/>flaskr]
-        SQLite[(SQLite DB)]
-        Volume[Named Volume<br/>flaskr-data]
-    end
-
-    Browser -->|HTTP :5000| Flask
-    DC -.->|Manages| Flask
-    DC -.->|Mounts| Volume
-    Flask -->|Writes to| SQLite
-    SQLite -->|Persists to| Volume
-
-    classDef container fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
-    classDef database fill:#fff4e1,stroke:#ff9900,stroke-width:2px
-    classDef client fill:#e8f5e9,stroke:#4caf50,stroke-width:2px
-
-    class Flask container
-    class SQLite database
-    class Browser client
-```
-## Roadmap
-
-- **v0.1.0 – Application & Container Foundation** *(Current)*
-  - Stable Flask blog application with CRUD functionality
-  - Containerized local setup using Docker Compose
-
-- **v1.x – Orchestration & Observability**
-  - Deploy the application to Kubernetes
-  - Introduce Prometheus-based metrics and monitoring
-
-- **v2.x – Cloud & GitOps**
-  - Migrate the cluster to AWS (EKS)
-  - Provision infrastructure using Infrastructure as Code
-  - Introduce GitOps-style deployment workflows
+Reach out through **chamodidesil@gmail.com** to request a live application demonstration at `https://opsblog.site`. 
 
 ## Contributing
 
 If you have any suggestions to make this project better, please fork the repo and open a pull request. 
 
-For major changes, please open an issue first
-to discuss what you would like to change.
+For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 This project uses the [MIT](https://github.com/chamodidesilva/Ops-Blog/blob/main/LICENSE) license.
 
 ## Contact
-Email: chamodidesil@gmail.com
-
-## Acknowledgments
-Resources that helped me throughout this project and may support you on yours.
-* [Flask tutorial](https://flask.palletsprojects.com/en/stable/tutorial/)
-* [Local application monitoring testing with Docker Compose](https://dev.to/camptocamp-ops/testing-application-monitoring-locally-with-a-docker-composition-47hn)
-* [The CI/CD handbook](https://www.freecodecamp.org/news/learn-continuous-integration-delivery-and-deployment/)
-* [Choose an Open Source License](https://choosealicense.com)
+* Via email at **chamodidesil@gmail.com**
+* Via social at **[LinkedIn](https://www.linkedin.com/in/chamodi-de-silva/)**

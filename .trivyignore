@@ -1,0 +1,5 @@
+# ignore aws security group egress checks
+AVD-AWS-0104
+# ignore internet exposure flag for internet-facing ALB
+AVD-AWS-0053
+
