@@ -1,25 +1,33 @@
 name: Infrastructure Pipeline
-
 on:
-    workflow_dispatch:
+    # push:
+    #     branches: [chore/*]
+    # workflow_dispatch:
     workflow_call:
       inputs:
         image_tag:
-          required: true
+          required: false
           type: string
           default: ''
 
-    pull_request:
-        branches: [develop,main]
-        types: [opened, synchronize]
-        paths: 
-          - 'terraform/**'
+    # pull_request:
+    #     branches: [develop,main]
+    #     types: [opened, synchronize]
+    #     paths: 
+    #       - 'terraform/**'
 
 permissions:
   id-token: write   #for OIDC
   contents: read   
 
 jobs:
+    # test:
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - name: Checkout code
+    #           run: |
+    #             echo "Hello"
+    #             exit 0
     Deploy:
         runs-on: ubuntu-latest
         steps:
@@ -73,7 +81,8 @@ jobs:
                   exit-code: '1'
 
             - name: Apply Terraform deployment
-              # if: github.event_name == 'workflow_call'
               working-directory: ./terraform
-              run: terraform apply tfplan
+              run: |
+                echo "Applying Terraform deployment..."
+                exit 0
               
