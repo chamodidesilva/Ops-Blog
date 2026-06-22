@@ -1,7 +1,5 @@
 name: CI/CD Orchestrator
 on:
-    # push:
-    #     branches: [chore/*]
     pull_request:
         branches: [develop, main]
         types: [opened, synchronize]  
@@ -11,14 +9,6 @@ permissions:
   contents: read  
 
 jobs:
-    # test:
-    #     runs-on: ubuntu-latest
-    #     steps:
-    #         - name: Checkout code
-    #           run: |
-    #             echo "Hello"
-    #             exit 0
-
     detect-changes:
         runs-on: ubuntu-latest
         outputs:
