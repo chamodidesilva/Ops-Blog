@@ -1,8 +1,5 @@
 name: Infrastructure Pipeline
 on:
-    # push:
-    #     branches: [chore/*]
-    # workflow_dispatch:
     workflow_call:
       inputs:
         image_tag:
@@ -10,24 +7,11 @@ on:
           type: string
           default: ''
 
-    # pull_request:
-    #     branches: [develop,main]
-    #     types: [opened, synchronize]
-    #     paths: 
-    #       - 'terraform/**'
-
 permissions:
   id-token: write   #for OIDC
   contents: read   
 
 jobs:
-    # test:
-    #     runs-on: ubuntu-latest
-    #     steps:
-    #         - name: Checkout code
-    #           run: |
-    #             echo "Hello"
-    #             exit 0
     Deploy:
         runs-on: ubuntu-latest
         steps:
