@@ -31,7 +31,7 @@
     <li><a href="#iac-resource-provisioning">IaC Resource Provisioning</a></li>
     <li><a href="#devops-automation-and-git-workflow">DevOps Automation and Git Workflow</a>
       <ul>
-        <li><a href="#automated-pipelines">Automated Pipelines</a></li>
+        <li><a href="#automated-github-workflow-pipeline">Automated GitHub Workflow Pipeline</a></li>
         <li><a href="#git-strategy">Git Strategy</a></li>
       </ul>
     </li>
@@ -115,9 +115,11 @@ Terraform configuration is designed to conditionally destroy resources to adhere
 
 ## DevOps Automation and Git Workflow  
 
-### Automated Pipelines
+### Automated GitHub Workflow Pipeline
 
-Pipelines are setup to trigger only on pull request creation and synchronization and **dorny/paths-filter** action is utilized to detect changes in file paths and selectively trigger the specific pipeline/jobs. 
+Workflow pipeline is setup to trigger only on pull request creation and synchronization and **dorny/paths-filter** action is utilized to detect changes in file paths and selectively trigger the specific downstream workflows. 
+
+* **`orchestrator.yaml`:** Executes change detection logic to determine the type of change being introduced via the PR and orchestrate calling the relevant downstream workflow: app-ci or infra-cd via **`workflow_call`** triggers.
 
 * **`app-ci.yaml`:** Triggered on pull requests created for application code/Dockerfile related changes. Automatically executes code linting, code validation, vulnerability scanning via **Trivy**, logs securely into AWS using secure **OIDC**, builds the optimized Docker images, tags and pushes them cleanly to Amazon ECR.
 * **`infra-pipeline.yaml`:** Automates the Terraform code execution and triggers for changes to the **terraform/** directory. Validates configurations, triggers misconfiguration scans, logs securely into AWS, generates execution plan files, and applies changes seamlessly inside AWS environment. 

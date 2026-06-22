@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-## [1.0.0] - 2026-06-20
+## [1.0.0] - 2026-06-22
 
 ### Added
 
@@ -39,10 +39,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### CI/CD Pipeline
 
 - Authenticate with AWS securely via OIDC federation using IAM roles
+- **`orchestrator.yaml`** to generate decision logic to call app-ci or infra-cd workflows using **`workflow_call`** triggers
+- Utilize **`dorny/paths-filter`** to detect changes based on file paths
 - **`app-ci.yaml`** to automates application code change integrations
-- **`infra-pipeline.yaml`** to automate Infrastructure as Code change integrations and deployments
-- Utilize **`dorny/paths-filter`** to detect changes based on file paths and conditionally trigger specific jobs
-- Created a .trivyignore file to intentionally bypass some vulnerabilities
+- **`infra-cd.yaml`** to automate Infrastructure as Code change integrations and deployments
+- Utilize a **`.trivyignore`** file to intentionally bypass specific vulnerabilities
 
 ### Changed
 
