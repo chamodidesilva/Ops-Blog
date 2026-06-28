@@ -1,4 +1,4 @@
-name: CI/CD Orchestrator
+name: Orchestrator
 on:
     pull_request:
         branches: [develop, main]

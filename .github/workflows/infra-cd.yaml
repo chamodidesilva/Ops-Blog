@@ -1,4 +1,4 @@
-name: Infrastructure Pipeline
+name: Infra CD
 on:
     workflow_call:
       inputs:

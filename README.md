@@ -1,6 +1,6 @@
 <div align="center">
     <picture>
-        <img src="docs/opsblog-logo.png" alt="Project Logo" width="400">
+        <img src="docs/assets/opsblog-logo.png" alt="Project Logo" width="400">
     </picture>
     
 [![CI](https://img.shields.io/github/actions/workflow/status/chamodidesilva/Ops-Blog/app-ci.yaml?style=flat-square&label=CI)](https://github.com/chamodidesilva/Ops-Blog/actions/workflows/app-ci.yaml)
@@ -74,7 +74,7 @@ The application is deployed on AWS using a structured Infrastructure-as-Code foo
 
 <div align="center">
     <picture>
-        <img src="docs/aws-infra.png" alt="Architecture Diagram">
+        <img src="docs/assets/aws-infra.png" alt="Architecture Diagram">
     </picture>
 </div>
 
@@ -127,6 +127,8 @@ Workflow pipeline is setup to trigger only on pull request creation and synchron
 ### Git Strategy
 * **Branching Strategy:** Maintained via a clean `main` / `develop` / `feature/*` workflow. 
 * **Standards:** Adheres to [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/) formatting rules and [Conventional Branching](https://conventionalbranch.org/) structures to maintain consistency.
+
+See [ci-cd-pipeline.md](docs/ci-cd-pipeline.md) for more details. 
 
 ---
 
